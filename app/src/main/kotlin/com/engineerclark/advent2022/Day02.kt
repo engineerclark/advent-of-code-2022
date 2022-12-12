@@ -4,8 +4,13 @@ import com.engineerclark.advent2022.utils.readInput
 import com.engineerclark.advent2022.utils.readTestInput
 
 fun main() {
+    // challenge 1
     val rounds = readRounds(readInput(2))
     println("Day 2, Challenge 1 -- My total points: ${rounds.totalScores().myPoints}")
+
+    // challenge 2
+    val decodedRounds = readEncodedRounds(readInput(2))
+    println("Day 2, Challenge 2 -- My total points: ${decodedRounds.totalScores().myPoints}")
 }
 
 fun readMove(moveChar: String): Move = when(moveChar) {
@@ -14,11 +19,28 @@ fun readMove(moveChar: String): Move = when(moveChar) {
     "C", "Z" -> Move.scissors
     else -> throw RuntimeException("Unrecognized move")
 }
+
+fun readEncodedMove(opponentMove: Move, moveChar: String): Move = when(moveChar) {
+    "X" -> Move.values().first { move -> move.against(opponentMove) == Outcome.lost }
+    "Y" -> opponentMove
+    "Z" -> Move.values().first { move -> move.against(opponentMove) == Outcome.won }
+    else -> throw RuntimeException("Unrecognized move")
+}
+
 fun readRound(line: String): Round {
     val moveChars = line.split(" ")
     return Round(line, readMove(moveChars[0]), readMove(moveChars[1]))
 }
+
+fun readEncodedRound(line: String): Round {
+    val moveChars = line.split(" ")
+    val opponentMove = readMove(moveChars[0])
+    return Round(line, opponentMove, readEncodedMove(opponentMove, moveChars[1]))
+}
+
 fun readRounds(input: String): List<Round> = input.trim().split("\n").map { readRound (it.trim()) }
+
+fun readEncodedRounds(input: String): List<Round> = input.trim().split("\n").map { readEncodedRound(it.trim()) }
 
 enum class Outcome(val value: Int) { lost(0), draw(3), won(6) }
 enum class Move(val value: Int) { rock(1), paper(2), scissors(3) }
