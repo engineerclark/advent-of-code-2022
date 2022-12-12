@@ -8,6 +8,7 @@ import com.engineerclark.advent2022.utils.readInput
 fun main() {
     val elves = readElves(readInput(1))
     println("Calories held by the Elf with the most: ${elves.elfWithMost()?.totalCalories}")
+    println("Calories held by the top 3 elves: ${elves.sortedByMostCalories().take(3).sumOf { it.totalCalories } }")
 }
 
 fun readElves(input: String): List<Elf> = input.trim().split("\n\n").map(::readElf)
