@@ -31,6 +31,15 @@ dependencies {
     implementation("com.google.guava:guava:31.0.1-jre")
 }
 
+sourceSets {
+    main {
+        resources {
+            srcDirs("app/src/main/resources")
+            include("**/*.txt")
+        }
+    }
+}
+
 testing {
     suites {
         // Configure the built-in test suite
