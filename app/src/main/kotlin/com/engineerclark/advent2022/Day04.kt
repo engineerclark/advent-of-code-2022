@@ -6,12 +6,18 @@ fun main() {
     val assignments = readDayLines(4).readPairAssignments()
     println("Day 4, challenge 1 -- Count of elf pair assignments where one is a subset of the other: " +
             "${assignments.countHavingSubset}")
+
+    println("Day 4, challenge 2 -- Count of elf pair assignments that overlap: " +
+            "${assignments.countOverlappingAssignments}")
 }
 
 fun List<String>.readPairAssignments(): List<ElfPair> = this.map { it.trim().readPairAssignment() }
 
 val List<ElfPair>.countHavingSubset
     get() = this.count { it.oneIsSubset }
+
+val List<ElfPair>.countOverlappingAssignments
+    get() = this.count { it.assignmentsOverlap }
 
 fun String.readPairAssignment(): ElfPair {
     val assignments = this.split(",")
@@ -34,4 +40,7 @@ data class ElfPair(
 ) {
     val oneIsSubset: Boolean
         get() = firstAssignment.containsAll(secondAssignment) || secondAssignment.containsAll(firstAssignment)
+
+    val assignmentsOverlap: Boolean
+        get() = firstAssignment.intersect(secondAssignment).isNotEmpty()
 }
